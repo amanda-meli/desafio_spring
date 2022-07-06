@@ -19,6 +19,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/src/main/resources/products.json
 
 ### NetBeans ###
 /nbproject/private/
