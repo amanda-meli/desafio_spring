@@ -28,8 +28,7 @@ public class ProductRepo {
 
         try {
             File data = new File(linkFile);
-
-            if (!data.exists()) {
+            if (!data.exists() || data.length() == 0) {
                 java.io.File newFile = new java.io.File(dir, fileName);
                 newFile.createNewFile();
 
