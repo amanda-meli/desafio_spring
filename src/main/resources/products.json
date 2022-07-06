@@ -1,0 +1,37 @@
+[ {
+  "productId" : 1,
+  "name" : "Serra de Bancada",
+  "category" : "Ferramentas",
+  "brand" : "FORTGPRO",
+  "price" : 1800.0,
+  "quantity" : 5,
+  "freeShipping" : true,
+  "prestige" : "****"
+}, {
+  "productId" : 2,
+  "name" : "Serra",
+  "category" : "Ferramentas",
+  "brand" : "FORTGPRO",
+  "price" : 1500.0,
+  "quantity" : 52,
+  "freeShipping" : true,
+  "prestige" : "***"
+}, {
+  "productId" : 3,
+  "name" : "Bancada",
+  "category" : "Ferramentas",
+  "brand" : "FORTGPRO",
+  "price" : 1800.0,
+  "quantity" : 5,
+  "freeShipping" : true,
+  "prestige" : "****"
+}, {
+  "productId" : 4,
+  "name" : "Serrada",
+  "category" : "Ferramentas",
+  "brand" : "FORTGPRO",
+  "price" : 1700.0,
+  "quantity" : 2,
+  "freeShipping" : true,
+  "prestige" : "**"
+} ]
