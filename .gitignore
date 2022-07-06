@@ -14,8 +14,8 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea/
-.mvn/
+/.idea/
+/.mvn/
 *.iws
 *.iml
 *.ipr
