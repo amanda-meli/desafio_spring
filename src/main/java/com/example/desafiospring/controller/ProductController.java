@@ -6,6 +6,7 @@ import com.example.desafiospring.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,15 @@ public class ProductController {
     }
 
     @GetMapping("articles")
-    public ResponseEntity<List<ProductDto>> getAllProducts(){
-        List<ProductDto> dto = service.getAllProducts();
+    public ResponseEntity<List<ProductDto>> getProducts(@RequestParam @Nullable String category){
+        List<ProductDto> dto;
+
+        if (category != null) {
+            dto = service.findByCategory(category);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+
+        dto = service.getAllProducts();
         return ResponseEntity.ok().body(dto);
     }
 //    getByCategory();
