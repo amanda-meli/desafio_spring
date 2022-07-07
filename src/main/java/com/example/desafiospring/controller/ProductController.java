@@ -22,7 +22,6 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> createProducts(@RequestBody ArrayList<Product> products ){
         List<ProductDto> dto = service.createProducts(products);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
-        //return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping("articles")
@@ -37,4 +36,10 @@ public class ProductController {
 //    getByFreeShipping();
 //    getByPrestige();
 //    saveProducts();
+
+    @GetMapping("articles/{id}")
+    public ResponseEntity<Integer> checkStock(@PathVariable int id){
+        ProductDto dto = service.checkStock(id);
+        return new ResponseEntity<>(dto.getQuantity(), HttpStatus.OK);
+    }
 }
