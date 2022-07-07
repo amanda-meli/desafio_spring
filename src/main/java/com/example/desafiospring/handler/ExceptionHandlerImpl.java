@@ -1,6 +1,7 @@
 package com.example.desafiospring.handler;
 
 import com.example.desafiospring.exception.ExceptionDetails;
+import com.example.desafiospring.exception.MethodNotAllowedException;
 import com.example.desafiospring.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,19 @@ public class ExceptionHandlerImpl {
                         .timestamp(LocalDateTime.now())
                         .build(),
                 HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(MethodNotAllowedException.class)
+    public ResponseEntity<ExceptionDetails> handlerMethodNotAllowedEx(MethodNotAllowedException ex){
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Método não implementado.")
+                        .status(HttpStatus.METHOD_NOT_ALLOWED.value())
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.METHOD_NOT_ALLOWED
         );
     }
 }

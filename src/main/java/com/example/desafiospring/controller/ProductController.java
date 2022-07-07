@@ -1,6 +1,8 @@
 package com.example.desafiospring.controller;
 
 import com.example.desafiospring.dto.ProductDto;
+import com.example.desafiospring.exception.MethodNotAllowedException;
+import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +30,27 @@ public class ProductController {
     @GetMapping("articles")
     public ResponseEntity<List<ProductDto>> getProducts(
             @RequestParam @Nullable String category,
-            @RequestParam @Nullable boolean freeShipping
+            @RequestParam @Nullable boolean isFreeShipping,
+            @RequestParam @Nullable String prestige
     ){
         List<ProductDto> dto;
 
         if (category != null) {
-            if (freeShipping) {
+            if (isFreeShipping) {
                 dto = service.findByFreeShipping(category);
                 return new ResponseEntity<>(dto, HttpStatus.OK);
             }
 
             dto = service.findByCategory(category);
             return new ResponseEntity<>(dto, HttpStatus.OK);
+        }
+        if (prestige != null) {
+            if (isFreeShipping) {
+                dto = service.findByPrestige(prestige);
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+
+            throw new MethodNotAllowedException("Não existe filtro por avaliação.");
         }
 
         dto = service.getAllProducts();

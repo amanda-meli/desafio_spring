@@ -14,6 +14,6 @@ public interface IProductService {
     Product findByMinPrice();
     Product findByMaxPrice();
     List<ProductDto> findByFreeShipping(String category);
-    List<ProductDto> findByPrestige();
+    List<ProductDto> findByPrestige(String prestige);
     ProductDto checkStock(int id);
 }
