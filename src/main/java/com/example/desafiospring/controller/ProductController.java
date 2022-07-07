@@ -29,40 +29,45 @@ public class ProductController {
 
     @GetMapping("articles")
     public ResponseEntity<List<ProductDto>> getProducts(
+            @RequestParam @Nullable String order,
             @RequestParam @Nullable String category,
             @RequestParam @Nullable boolean isFreeShipping,
             @RequestParam @Nullable String prestige
+
     ){
+
+        if(order == null){
+            order = "-1";
+        }
+
         List<ProductDto> dto;
 
         if (category != null) {
             if (isFreeShipping) {
-                dto = service.findByFreeShipping(category);
+                dto = service.findByFreeShipping(category, order);
                 return new ResponseEntity<>(dto, HttpStatus.OK);
             }
 
-            dto = service.findByCategory(category);
+            dto = service.findByCategory(category, order);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }
         if (prestige != null) {
             if (isFreeShipping) {
-                dto = service.findByPrestige(prestige);
+                dto = service.findByPrestige(prestige, order);
                 return new ResponseEntity<>(dto, HttpStatus.OK);
             }
 
             throw new MethodNotAllowedException("Não existe filtro por avaliação.");
         }
 
-        dto = service.getAllProducts();
+        dto = service.getAllProducts(order);
         return ResponseEntity.ok().body(dto);
     }
-//    getByCategory();
+
 //    getByAlphabeticOrder();
 //    getByMinPrice();
 //    getByMaxPrice();
-//    getByFreeShipping();
-//    getByPrestige();
-//    saveProducts();
+
 
     @GetMapping("articles/{id}")
     public ResponseEntity<Integer> checkStock(@PathVariable int id){

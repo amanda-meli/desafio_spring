@@ -17,8 +17,31 @@ public class ProductServiceImp implements IProductService{
     @Autowired
     private ProductRepo repo;
 
-    private List<Product> allProducts() {
-        return repo.getAllProducts();
+    private List<Product> allProducts(String order) {
+        switch (order){
+            case "0":
+                return repo.getAllProducts()
+                        .stream()
+                        .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                        .collect(Collectors.toList());
+            case "1":
+                return repo.getAllProducts()
+                        .stream()
+                        .sorted((p1, p2) -> p2.getName().compareTo(p1.getName()))
+                        .collect(Collectors.toList());
+            case "2":
+                return repo.getAllProducts()
+                        .stream()
+                        .sorted((p1, p2) -> p1.compareTo(p2))
+                        .collect(Collectors.toList());
+            case "3":
+                return repo.getAllProducts()
+                        .stream()
+                        .sorted((p1, p2) -> p2.compareTo(p1))
+                        .collect(Collectors.toList());
+            default:
+                return repo.getAllProducts();
+        }
     }
 
     @Override
@@ -32,13 +55,13 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public List<ProductDto> getAllProducts() {
-        return allProducts().stream().map(ProductDto::new).collect(Collectors.toList());
+    public List<ProductDto> getAllProducts(String order) {
+        return allProducts(order).stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductDto> findByCategory(String category) {
-        List<ProductDto> allProductsDto = allProducts().stream()
+    public List<ProductDto> findByCategory(String category, String order) {
+        List<ProductDto> allProductsDto = allProducts(order).stream()
                 .filter(p -> p.getCategory().equals(category))
                 .map(ProductDto::new).collect(Collectors.toList());
 
@@ -50,10 +73,16 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public List<ProductDto> findByAlphabeticOrder() {
-        return null;
-    }
+    public List<ProductDto> findByAlphabeticOrder(String order) {
 
+        List<ProductDto> allProductsDto = allProducts(order)
+                .stream()
+                .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
+
+        return allProductsDto;
+    }
     @Override
     public Product findByMinPrice() {
         return null;
@@ -65,8 +94,8 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public List<ProductDto> findByFreeShipping(String category) {
-        List<ProductDto> allProductsDto = allProducts().stream()
+    public List<ProductDto> findByFreeShipping(String category, String order) {
+        List<ProductDto> allProductsDto = allProducts(order).stream()
                 .filter(p -> p.getCategory().equals(category) && p.isFreeShipping())
                 .map(ProductDto::new).collect(Collectors.toList());
 
@@ -78,8 +107,8 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public List<ProductDto> findByPrestige(String prestige) {
-        List<ProductDto> allProductsDto = allProducts().stream()
+    public List<ProductDto> findByPrestige(String prestige, String order) {
+        List<ProductDto> allProductsDto = allProducts(order).stream()
                 .filter(p -> p.isFreeShipping() && p.getPrestige().equals(prestige))
                 .map(ProductDto::new).collect(Collectors.toList());
 
@@ -91,7 +120,7 @@ public class ProductServiceImp implements IProductService{
 
     @Override
     public ProductDto checkStock(int id){
-        List<ProductDto> allProducts = getAllProducts();
+        List<ProductDto> allProducts = getAllProducts(null);
         ProductDto productDto = allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
 
         if (productDto == null){

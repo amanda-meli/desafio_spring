@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product implements Comparable<Product>{
     private int productId;
     private String name;
     private String category;
@@ -23,4 +23,10 @@ public class Product {
     private int quantity;
     private boolean freeShipping;
     private String prestige;
+
+
+    @Override
+    public int compareTo(Product o) {
+        return (int) (this.getPrice() - o.getPrice());
+    }
 }
