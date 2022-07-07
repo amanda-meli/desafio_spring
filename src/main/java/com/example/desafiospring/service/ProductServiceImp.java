@@ -1,6 +1,7 @@
 package com.example.desafiospring.service;
 
 import com.example.desafiospring.dto.ProductDto;
+import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,11 @@ public class ProductServiceImp implements IProductService{
     @Override
     public ProductDto checkStock(int id){
         List<ProductDto> allProducts = getAllProducts();
-        return allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
+        ProductDto productDto = allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
+
+        if (productDto == null){
+            throw new NotFoundException("Produto não encontrado.");
+        }
+        return productDto;
     }
 }

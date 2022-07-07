@@ -1,5 +1,6 @@
 package com.example.desafiospring.repository;
 
+import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,17 +18,19 @@ public class ProductRepo {
     private final String dir = "src/main/resources/";
     private final String fileName = "products.json";
 
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         ObjectMapper mapper = new ObjectMapper();
         List<Product> allProducts = null;
 
-        try {
-            File data = new File(linkFile);
-            if (!data.exists() || data.length() == 0) {
-                //TODO: disparar exception
-                return null;
-            }
+        File data = new File(linkFile);
+        if (!data.exists()) {
+            throw new NotFoundException("Arquivo não existe");
+        }
+        if (data.length() == 0) {
+            throw new NotFoundException("Não ha produto cadastrado.");
+        }
 
+        try {
             allProducts = Arrays.asList(
                     mapper.readValue(data, Product[].class)
             );
@@ -37,7 +40,7 @@ public class ProductRepo {
         return allProducts;
     }
 
-    public ArrayList<Product> saveProducts(ArrayList<Product> products){
+    public ArrayList<Product> saveProducts(ArrayList<Product> products) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         List<Product> currentListProducts = null;
@@ -66,7 +69,7 @@ public class ProductRepo {
         return products;
     }
 
-    public void saveProduct(Product products){
+    public void saveProduct(Product products) {
         //bonus
     }
 
