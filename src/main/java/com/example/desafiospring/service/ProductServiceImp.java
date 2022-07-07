@@ -66,9 +66,15 @@ public class ProductServiceImp implements IProductService{
 
     @Override
     public List<ProductDto> findByFreeShipping(String category) {
-        return allProducts().stream()
+        List<ProductDto> allProductsDto = allProducts().stream()
                 .filter(p -> p.getCategory().equals(category) && p.isFreeShipping())
                 .map(ProductDto::new).collect(Collectors.toList());
+
+        if (allProductsDto.size() == 0) {
+            throw new NotFoundException("Não existe produto dessa categoria com frete grátis.");
+        }
+
+        return allProductsDto;
     }
 
     @Override
