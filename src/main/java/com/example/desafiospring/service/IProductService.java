@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public interface IProductService {
     List<ProductDto> createProducts(ArrayList<Product> products);
-    List<ProductDto> getAllProducts();
-    List<ProductDto> findByCategory(String category);
-    List<ProductDto> findByAlphabeticOrder();
+    List<ProductDto> getAllProducts(String order);
+    List<ProductDto> findByCategory(String category, String order);
+    List<ProductDto> findByAlphabeticOrder(String order);
     Product findByMinPrice();
     Product findByMaxPrice();
-    List<ProductDto> findByFreeShipping(String category);
-    List<ProductDto> findByPrestige(String prestige);
+    List<ProductDto> findByFreeShipping(String category, String order);
+    List<ProductDto> findByPrestige(String prestige, String order);
     ProductDto checkStock(int id);
 }
