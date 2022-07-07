@@ -17,6 +17,10 @@ public class ProductServiceImp implements IProductService{
     @Autowired
     private ProductRepo repo;
 
+    private List<Product> allProducts() {
+        return repo.getAllProducts();
+    }
+
     @Override
     public List<ProductDto> createProducts(ArrayList<Product> products) {
         ArrayList<Product> listProducts = repo.saveProducts(products);
@@ -29,16 +33,14 @@ public class ProductServiceImp implements IProductService{
 
     @Override
     public List<ProductDto> getAllProducts() {
-        List<Product> allProducts = repo.getAllProducts();
-        return allProducts.stream().map(ProductDto::new).collect(Collectors.toList());
+        return allProducts().stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDto> findByCategory(String category) {
-        List<Product> allProducts = repo.getAllProducts();
-        List<ProductDto> allProductsDto = allProducts.stream()
+        List<ProductDto> allProductsDto = allProducts().stream()
                 .filter(p -> p.getCategory().equals(category))
-                .map(p -> new ProductDto(p)).collect(Collectors.toList());
+                .map(ProductDto::new).collect(Collectors.toList());
 
         if (allProductsDto.size() == 0) {
             throw new NotFoundException("Categoria não encontrada.");
@@ -63,8 +65,10 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public List<ProductDto> findByFreeShipping() {
-        return null;
+    public List<ProductDto> findByFreeShipping(String category) {
+        return allProducts().stream()
+                .filter(p -> p.getCategory().equals(category) && p.isFreeShipping())
+                .map(ProductDto::new).collect(Collectors.toList());
     }
 
     @Override

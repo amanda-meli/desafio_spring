@@ -26,10 +26,18 @@ public class ProductController {
     }
 
     @GetMapping("articles")
-    public ResponseEntity<List<ProductDto>> getProducts(@RequestParam @Nullable String category){
+    public ResponseEntity<List<ProductDto>> getProducts(
+            @RequestParam @Nullable String category,
+            @RequestParam @Nullable boolean freeShipping
+    ){
         List<ProductDto> dto;
 
         if (category != null) {
+            if (freeShipping) {
+                dto = service.findByFreeShipping(category);
+                return new ResponseEntity<>(dto, HttpStatus.OK);
+            }
+
             dto = service.findByCategory(category);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         }
