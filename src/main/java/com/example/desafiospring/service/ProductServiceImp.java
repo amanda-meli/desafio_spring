@@ -1,11 +1,14 @@
 package com.example.desafiospring.service;
 
+import com.example.desafiospring.dto.ProductDto;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImp implements IProductService{
@@ -14,17 +17,22 @@ public class ProductServiceImp implements IProductService{
     private ProductRepo repo;
 
     @Override
-    public void createProducts(ArrayList<Product> products) {
-        repo.saveProducts(products);
+    public List<ProductDto> createProducts(ArrayList<Product> products) {
+        ArrayList<Product> listProducts = repo.saveProducts(products);
+
+        List<ProductDto> listProductsDto = listProducts.stream()
+                .map(ProductDto::new).collect(Collectors.toList());
+
+        return listProductsDto;
     }
 
     @Override
-    public ArrayList<Product> findByCategory(String category) {
+    public List<ProductDto> findByCategory(String category) {
         return null;
     }
 
     @Override
-    public ArrayList<Product> findByAlphabeticOrder() {
+    public List<ProductDto> findByAlphabeticOrder() {
         return null;
     }
 
@@ -39,12 +47,12 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public ArrayList<Product> findByFreeShipping() {
+    public List<ProductDto> findByFreeShipping() {
         return null;
     }
 
     @Override
-    public ArrayList<Product> findByPrestige() {
+    public List<ProductDto> findByPrestige() {
         return null;
     }
 }

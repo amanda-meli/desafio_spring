@@ -21,7 +21,7 @@ public class ProductRepo {
         return null;
     }
 
-    public void saveProducts(ArrayList<Product> products){
+    public ArrayList<Product> saveProducts(ArrayList<Product> products){
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         List<Product> currentListProducts = null;
@@ -33,7 +33,7 @@ public class ProductRepo {
                 newFile.createNewFile();
 
                 writer.writeValue(newFile, products);
-                return;
+                return products;
             }
 
             currentListProducts = Arrays.asList(
@@ -47,6 +47,7 @@ public class ProductRepo {
             System.out.println("Error to save products. Error: " + ex);
         }
 
+        return products;
     }
 
     public void saveProduct(Product products){
