@@ -13,7 +13,7 @@ public interface IProductService {
     List<ProductDto> findByAlphabeticOrder();
     Product findByMinPrice();
     Product findByMaxPrice();
-    List<ProductDto> findByFreeShipping();
-    List<ProductDto> findByPrestige();
+    List<ProductDto> findByFreeShipping(String category);
+    List<ProductDto> findByPrestige(String prestige);
     ProductDto checkStock(int id);
 }
