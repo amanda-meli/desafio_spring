@@ -27,6 +27,12 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
+    public List<ProductDto> getAllProducts() {
+        List<Product> allProducts = repo.getAllProducts();
+        return allProducts.stream().map(ProductDto::new).collect(Collectors.toList());
+    }
+
+    @Override
     public List<ProductDto> findByCategory(String category) {
         return null;
     }
@@ -54,5 +60,11 @@ public class ProductServiceImp implements IProductService{
     @Override
     public List<ProductDto> findByPrestige() {
         return null;
+    }
+
+    @Override
+    public ProductDto checkStock(int id){
+        List<ProductDto> allProducts = getAllProducts();
+        return allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
     }
 }

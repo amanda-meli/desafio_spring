@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 public interface IProductService {
     List<ProductDto> createProducts(ArrayList<Product> products);
+    List<ProductDto> getAllProducts();
     List<ProductDto> findByCategory(String category);
     List<ProductDto> findByAlphabeticOrder();
     Product findByMinPrice();
     Product findByMaxPrice();
     List<ProductDto> findByFreeShipping();
     List<ProductDto> findByPrestige();
+    ProductDto checkStock(int id);
 }

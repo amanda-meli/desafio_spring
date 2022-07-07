@@ -18,7 +18,23 @@ public class ProductRepo {
     private final String fileName = "products.json";
 
     public List<Product> getAllProducts(){
-        return null;
+        ObjectMapper mapper = new ObjectMapper();
+        List<Product> allProducts = null;
+
+        try {
+            File data = new File(linkFile);
+            if (!data.exists() || data.length() == 0) {
+                //TODO: disparar exception
+                return null;
+            }
+
+            allProducts = Arrays.asList(
+                    mapper.readValue(data, Product[].class)
+            );
+        } catch (Exception ex) {
+            System.out.println("Error getting the products. Error: " + ex);
+        }
+        return allProducts;
     }
 
     public ArrayList<Product> saveProducts(ArrayList<Product> products){
