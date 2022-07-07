@@ -120,7 +120,7 @@ public class ProductServiceImp implements IProductService{
 
     @Override
     public ProductDto checkStock(int id){
-        List<ProductDto> allProducts = getAllProducts(null);
+        List<ProductDto> allProducts = getAllProducts("");
         ProductDto productDto = allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
 
         if (productDto == null){
