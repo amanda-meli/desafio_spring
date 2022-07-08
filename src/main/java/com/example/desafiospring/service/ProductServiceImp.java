@@ -3,6 +3,8 @@ package com.example.desafiospring.service;
 import com.example.desafiospring.dto.ProductDto;
 import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
+import com.example.desafiospring.model.Purchase;
+import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,5 +129,19 @@ public class ProductServiceImp implements IProductService{
             throw new NotFoundException("Produto não encontrado.");
         }
         return productDto;
+    }
+
+    @Override
+    public Ticket purchaseRequest(List<Purchase> purchases){
+        List<Product> allProducts = repo.getAllProducts();
+        Ticket ticket = Ticket.builder().build();
+        // tratar nullpointer
+        for (Purchase p : purchases ){
+            Product product = (Product) allProducts.stream().filter(prod -> prod.getProductId() == p.getId());
+         ticket.getArticles().add(product);
+         ticket.setTotal(ticket.getTotal() + product.getPrice() * p.getQuantity());
+        }
+        return ticket;
+
     }
 }
