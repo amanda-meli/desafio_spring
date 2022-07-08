@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImp implements IProductService{
+public class ProductServiceImp implements IProductService {
 
     @Autowired
     private ProductRepo repo;
 
     private List<Product> allProducts(String order) {
-        switch (order){
+        switch (order) {
             case "0":
                 return repo.getAllProducts()
                         .stream()
@@ -85,6 +85,7 @@ public class ProductServiceImp implements IProductService{
 
         return allProductsDto;
     }
+
     @Override
     public Product findByMinPrice() {
         return null;
@@ -121,27 +122,39 @@ public class ProductServiceImp implements IProductService{
     }
 
     @Override
-    public ProductDto checkStock(int id){
+    public ProductDto checkStock(int id) {
         List<ProductDto> allProducts = getAllProducts("");
         ProductDto productDto = allProducts.stream().filter(p -> p.getProductId() == id).findFirst().orElse(null);
 
-        if (productDto == null){
+        if (productDto == null) {
             throw new NotFoundException("Produto não encontrado.");
         }
         return productDto;
     }
 
     @Override
-    public Ticket purchaseRequest(List<Purchase> purchases){
+    public Ticket purchaseRequest(List<Purchase> purchases) {
         List<Product> allProducts = repo.getAllProducts();
-        Ticket ticket = Ticket.builder().build();
-        // tratar nullpointer
-        for (Purchase p : purchases ){
-            Product product = (Product) allProducts.stream().filter(prod -> prod.getProductId() == p.getId());
-         ticket.getArticles().add(product);
-         ticket.setTotal(ticket.getTotal() + product.getPrice() * p.getQuantity());
-        }
-        return ticket;
+        Ticket ticket = Ticket.builder()
+                .articles(new ArrayList<>())
+                .build();
 
+        for (Purchase p : purchases) { //Percore toda a lista de produtos que eu quero add ao ticket
+            Product prod = getProductById(p.getProductId(), allProducts);
+            prod.setQuantity(p.getQuantity());
+            ticket.getArticles().add(prod); // add ao ticket
+            ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
+        }
+
+        return ticket;
+    }
+
+    private Product getProductById(int id, List<Product> allProducts) {
+        for (Product prod : allProducts) { //procura se esse produto exite na lista
+            if (prod.getProductId() == id) { //quando encontrar
+                return prod;
+            }
+        }
+        throw new NotFoundException("Não existe produto com o id: " + id);
     }
 }

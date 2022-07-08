@@ -4,12 +4,13 @@ import com.example.desafiospring.dto.ProductDto;
 import com.example.desafiospring.exception.MethodNotAllowedException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.model.Purchase;
+import com.example.desafiospring.model.PurchaseRequest;
 import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,8 +73,8 @@ public class ProductController {
     }
 
     @PostMapping("purchase-request")
-    public ResponseEntity<Ticket> purchaseRequest(@RequestBody List<Purchase> articlesPurchaseRequest){
-        Ticket ticket = service.purchaseRequest(articlesPurchaseRequest);
+    public ResponseEntity<Ticket> purchaseRequest(@RequestBody PurchaseRequest purchase){
+        Ticket ticket = service.purchaseRequest(purchase.getArticlesPurchaseRequest());
         return ResponseEntity.ok().body(ticket);
     }
 }
