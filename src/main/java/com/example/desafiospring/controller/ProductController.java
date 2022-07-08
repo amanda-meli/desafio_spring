@@ -2,8 +2,10 @@ package com.example.desafiospring.controller;
 
 import com.example.desafiospring.dto.ProductDto;
 import com.example.desafiospring.exception.MethodNotAllowedException;
-import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
+import com.example.desafiospring.model.Purchase;
+import com.example.desafiospring.model.PurchaseRequest;
+import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,14 +66,15 @@ public class ProductController {
         return ResponseEntity.ok().body(dto);
     }
 
-//    getByAlphabeticOrder();
-//    getByMinPrice();
-//    getByMaxPrice();
-
-
     @GetMapping("articles/{id}")
     public ResponseEntity<Integer> checkStock(@PathVariable int id){
         ProductDto dto = service.checkStock(id);
         return new ResponseEntity<>(dto.getQuantity(), HttpStatus.OK);
+    }
+
+    @PostMapping("purchase-request")
+    public ResponseEntity<Ticket> purchaseRequest(@RequestBody PurchaseRequest purchase){
+        Ticket ticket = service.purchaseRequest(purchase.getArticlesPurchaseRequest());
+        return ResponseEntity.ok().body(ticket);
     }
 }
