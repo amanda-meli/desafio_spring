@@ -64,8 +64,7 @@ public class ProductRepo {
         } catch (Exception ex) {
             System.out.println("Error getting the tickets. Error: " + ex);
         }
-
-        return allTickets;
+        return new ArrayList<>(allTickets);
     }
 
     public ArrayList<Product> saveProducts(ArrayList<Product> products) {
@@ -129,6 +128,27 @@ public class ProductRepo {
         }
 
         return ticket;
+    }
+
+    public void updateTicket(List<Ticket> allTicketsCurrent) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+
+        File data = new File(dir + fileNameTicket);
+        if (!data.exists()) {
+            throw new NotFoundException("Arquivo de tickets não existe");
+        }
+
+        if (data.length() == 0) {
+            throw new NotFoundException("Tickets não existe");
+        }
+
+        try {
+            writer.writeValue(data, allTicketsCurrent);
+        } catch (Exception ex) {
+            System.out.println("Erro ao salvar ticket. Error: " + ex);
+        }
+
     }
 
     public void updateProduct(List<Product> allProducts) {

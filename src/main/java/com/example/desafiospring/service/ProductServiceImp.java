@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 public class ProductServiceImp implements IProductService {
 
@@ -145,11 +144,8 @@ public class ProductServiceImp implements IProductService {
         //Define o id do novo ticket
         List<Ticket> allTicketsCurrent = repo.getAllTicket();
 
-        //a lista de cima não pode mudar
-        List<Ticket> allTickets = new ArrayList<>(allTicketsCurrent);
-
-        ticket.setId(allTickets.size() + 1);
-        allTickets.add(ticket);
+        ticket.setId(allTicketsCurrent.size() + 1);
+        allTicketsCurrent.add(ticket);
 
         //salva o no arquivo
         repo.saveTicket(ticket);
@@ -159,8 +155,46 @@ public class ProductServiceImp implements IProductService {
 
     @Override
     public Ticket shoppingCar(PurchaseRequest purchases) {
+        List<Ticket> allTicketsCurrent = repo.getAllTicket();
+        Ticket ticket = getTicketById(purchases.getTicketId(), allTicketsCurrent);
+        List<Product> allProducts = repo.getAllProducts();
 
-        return null;
+        for (Purchase p : purchases.getArticlesPurchaseRequest()) { //Percore toda a lista de produtos que eu quero add ao ticket
+            Product prod = getProductById(p.getProductId(), allProducts);
+            Product article = Product.builder()
+                    .productId(prod.getProductId())
+                    .name(prod.getName())
+                    .brand(prod.getBrand())
+                    .category(prod.getCategory())
+                    .freeShipping(prod.isFreeShipping())
+                    .prestige(prod.getPrestige())
+                    .price(prod.getPrice())
+                    .quantity(p.getQuantity())
+                    .build();
+            if(prod.getQuantity() < p.getQuantity()){
+                throw new BadRequestException("Quantidade do produto '" + prod.getName() + "' em estoque insuficiente." +
+                        " - Em estoque: " + prod.getQuantity() + " - Solicitado: " + p.getQuantity());
+            }
+            prod.setQuantity(prod.getQuantity() - article.getQuantity());
+            ticket.getArticles().add(article); // add ao ticket
+            ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
+        }
+
+        repo.updateProduct(allProducts);
+
+        //atualiza o arquivo
+        repo.updateTicket(allTicketsCurrent);
+
+        return ticket;
+    }
+
+    private Ticket getTicketById(int id, List<Ticket> allTickets) {
+        for (Ticket t : allTickets) { //procura se esse produto exite na lista
+            if (t.getId() == id) { //quando encontrar
+                return t;
+            }
+        }
+        throw new NotFoundException("Não existe ticket com o id: " + id);
     }
 
     private Product getProductById(int id, List<Product> allProducts) {
