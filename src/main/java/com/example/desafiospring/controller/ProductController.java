@@ -77,4 +77,10 @@ public class ProductController {
         Ticket ticket = service.purchaseRequest(purchase.getArticlesPurchaseRequest());
         return ResponseEntity.ok().body(ticket);
     }
+
+    @PostMapping("shopping-car")
+    public ResponseEntity<Ticket> shoppingCar(@RequestBody PurchaseRequest purchase){
+        Ticket ticket = service.shoppingCar(purchase);
+        return ResponseEntity.ok().body(ticket);
+    }
 }

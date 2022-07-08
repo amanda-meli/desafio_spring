@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Ticket {
-
     private int id;
     private List<Product> articles;
     private double total;

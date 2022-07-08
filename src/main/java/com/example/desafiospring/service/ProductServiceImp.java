@@ -5,6 +5,7 @@ import com.example.desafiospring.exception.BadRequestException;
 import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.model.Purchase;
+import com.example.desafiospring.model.PurchaseRequest;
 import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 public class ProductServiceImp implements IProductService {
 
@@ -73,28 +73,6 @@ public class ProductServiceImp implements IProductService {
         }
 
         return allProductsDto;
-    }
-
-    @Override
-    public List<ProductDto> findByAlphabeticOrder(String order) {
-
-        List<ProductDto> allProductsDto = allProducts(order)
-                .stream()
-                .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
-
-        return allProductsDto;
-    }
-
-    @Override
-    public Product findByMinPrice() {
-        return null;
-    }
-
-    @Override
-    public Product findByMaxPrice() {
-        return null;
     }
 
     @Override
@@ -160,8 +138,63 @@ public class ProductServiceImp implements IProductService {
             ticket.getArticles().add(article); // add ao ticket
             ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
         }
+
         repo.updateProduct(allProducts);
+
+        //Define o id do novo ticket
+        List<Ticket> allTicketsCurrent = repo.getAllTicket();
+
+        ticket.setId(allTicketsCurrent.size() + 1);
+        allTicketsCurrent.add(ticket);
+
+        //salva o no arquivo
+        repo.saveTicket(ticket);
+
         return ticket;
+    }
+
+    @Override
+    public Ticket shoppingCar(PurchaseRequest purchases) {
+        List<Ticket> allTicketsCurrent = repo.getAllTicket();
+        Ticket ticket = getTicketById(purchases.getTicketId(), allTicketsCurrent);
+        List<Product> allProducts = repo.getAllProducts();
+
+        for (Purchase p : purchases.getArticlesPurchaseRequest()) { //Percore toda a lista de produtos que eu quero add ao ticket
+            Product prod = getProductById(p.getProductId(), allProducts);
+            Product article = Product.builder()
+                    .productId(prod.getProductId())
+                    .name(prod.getName())
+                    .brand(prod.getBrand())
+                    .category(prod.getCategory())
+                    .freeShipping(prod.isFreeShipping())
+                    .prestige(prod.getPrestige())
+                    .price(prod.getPrice())
+                    .quantity(p.getQuantity())
+                    .build();
+            if(prod.getQuantity() < p.getQuantity()){
+                throw new BadRequestException("Quantidade do produto '" + prod.getName() + "' em estoque insuficiente." +
+                        " - Em estoque: " + prod.getQuantity() + " - Solicitado: " + p.getQuantity());
+            }
+            prod.setQuantity(prod.getQuantity() - article.getQuantity());
+            ticket.getArticles().add(article); // add ao ticket
+            ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
+        }
+
+        repo.updateProduct(allProducts);
+
+        //atualiza o arquivo
+        repo.updateTicket(allTicketsCurrent);
+
+        return ticket;
+    }
+
+    private Ticket getTicketById(int id, List<Ticket> allTickets) {
+        for (Ticket t : allTickets) { //procura se esse produto exite na lista
+            if (t.getId() == id) { //quando encontrar
+                return t;
+            }
+        }
+        throw new NotFoundException("Não existe ticket com o id: " + id);
     }
 
     private Product getProductById(int id, List<Product> allProducts) {
@@ -172,4 +205,5 @@ public class ProductServiceImp implements IProductService {
         }
         throw new NotFoundException("Não existe produto com o id: " + id);
     }
+
 }
