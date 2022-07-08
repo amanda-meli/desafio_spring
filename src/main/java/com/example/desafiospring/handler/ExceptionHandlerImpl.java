@@ -1,5 +1,6 @@
 package com.example.desafiospring.handler;
 
+import com.example.desafiospring.exception.BadRequestException;
 import com.example.desafiospring.exception.ExceptionDetails;
 import com.example.desafiospring.exception.MethodNotAllowedException;
 import com.example.desafiospring.exception.NotFoundException;
@@ -36,6 +37,19 @@ public class ExceptionHandlerImpl {
                         .timestamp(LocalDateTime.now())
                         .build(),
                 HttpStatus.METHOD_NOT_ALLOWED
+        );
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionDetails> handlerBadRequestEx(BadRequestException ex){
+        return new ResponseEntity<>(
+                ExceptionDetails.builder()
+                        .title("Falha na requisição.")
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .message(ex.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .build(),
+                HttpStatus.BAD_REQUEST
         );
     }
 }

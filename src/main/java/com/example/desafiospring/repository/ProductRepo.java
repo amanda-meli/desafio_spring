@@ -73,4 +73,24 @@ public class ProductRepo {
         //bonus
     }
 
+    public void updateProduct(List<Product> allProducts) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+
+        try {
+            File data = new File(linkFile);
+            if (!data.exists() || data.length() == 0) {
+                java.io.File newFile = new java.io.File(dir, fileName);
+                newFile.createNewFile();
+
+
+                return;
+            }
+
+            writer.writeValue(data, allProducts);
+        } catch (Exception ex) {
+            System.out.println("Error to save products. Error: " + ex);
+        }
+
+    }
 }
