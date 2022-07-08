@@ -160,7 +160,11 @@ public class ProductServiceImp implements IProductService {
             ticket.getArticles().add(article); // add ao ticket
             ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
         }
+
         repo.updateProduct(allProducts);
+
+        repo.saveTicket(ticket);
+
         return ticket;
     }
 
