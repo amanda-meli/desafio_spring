@@ -42,6 +42,32 @@ public class ProductRepo {
         return allProducts;
     }
 
+    public List<Ticket> getAllTicket() {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Ticket> allTickets = null;
+        File data = new File(dir + fileNameTicket);
+
+        try {
+            if (!data.exists()) { //se o arquivo n existir, vai criar.
+                java.io.File newFile = new java.io.File(dir, fileNameTicket);
+                newFile.createNewFile();
+                return new ArrayList<Ticket>();
+            }
+            if (data.length() == 0) { //se na tiver nada dentro do arquivo, vai mandar uma lista vazia
+                return new ArrayList<Ticket>();
+            }
+
+            //Atribui a lista que existe dentro do arquivo
+            allTickets = Arrays.asList(
+                    mapper.readValue(data, Ticket[].class)
+            );
+        } catch (Exception ex) {
+            System.out.println("Error getting the tickets. Error: " + ex);
+        }
+
+        return allTickets;
+    }
+
     public ArrayList<Product> saveProducts(ArrayList<Product> products) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
@@ -75,15 +101,19 @@ public class ProductRepo {
     public Ticket saveTicket(Ticket ticket) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-        List<Ticket> currentListTicket = null;
+        List<Ticket> currentListTicket = null; //obter os dados que ja existem
 
         try {
             File data = new File(dir + fileNameTicket);
             if (!data.exists() || data.length() == 0) {
+
+                List<Ticket> currentList = new ArrayList<>(); //Isso eh para salvar a primeira vez como uma lista
+                currentList.add(ticket);
+
                 java.io.File newFile = new java.io.File(dir, fileNameTicket);
                 newFile.createNewFile();
 
-                writer.writeValue(newFile, ticket);
+                writer.writeValue(newFile, currentList);
                 return ticket;
             }
 
@@ -110,8 +140,6 @@ public class ProductRepo {
             if (!data.exists() || data.length() == 0) {
                 java.io.File newFile = new java.io.File(dir, fileNameProducts);
                 newFile.createNewFile();
-
-
                 return;
             }
 

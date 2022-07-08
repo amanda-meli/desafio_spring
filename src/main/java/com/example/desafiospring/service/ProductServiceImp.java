@@ -5,6 +5,7 @@ import com.example.desafiospring.exception.BadRequestException;
 import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.model.Purchase;
+import com.example.desafiospring.model.PurchaseRequest;
 import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.repository.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,28 +77,6 @@ public class ProductServiceImp implements IProductService {
     }
 
     @Override
-    public List<ProductDto> findByAlphabeticOrder(String order) {
-
-        List<ProductDto> allProductsDto = allProducts(order)
-                .stream()
-                .sorted((p1, p2) -> p1.getName().compareTo(p2.getName()))
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
-
-        return allProductsDto;
-    }
-
-    @Override
-    public Product findByMinPrice() {
-        return null;
-    }
-
-    @Override
-    public Product findByMaxPrice() {
-        return null;
-    }
-
-    @Override
     public List<ProductDto> findByFreeShipping(String category, String order) {
         List<ProductDto> allProductsDto = allProducts(order).stream()
                 .filter(p -> p.getCategory().equals(category) && p.isFreeShipping())
@@ -163,9 +142,25 @@ public class ProductServiceImp implements IProductService {
 
         repo.updateProduct(allProducts);
 
+        //Define o id do novo ticket
+        List<Ticket> allTicketsCurrent = repo.getAllTicket();
+
+        //a lista de cima não pode mudar
+        List<Ticket> allTickets = new ArrayList<>(allTicketsCurrent);
+
+        ticket.setId(allTickets.size() + 1);
+        allTickets.add(ticket);
+
+        //salva o no arquivo
         repo.saveTicket(ticket);
 
         return ticket;
+    }
+
+    @Override
+    public Ticket shoppingCar(PurchaseRequest purchases) {
+
+        return null;
     }
 
     private Product getProductById(int id, List<Product> allProducts) {
@@ -176,4 +171,5 @@ public class ProductServiceImp implements IProductService {
         }
         throw new NotFoundException("Não existe produto com o id: " + id);
     }
+
 }
