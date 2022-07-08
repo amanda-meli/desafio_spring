@@ -1,6 +1,7 @@
 package com.example.desafiospring.service;
 
 import com.example.desafiospring.dto.ProductDto;
+import com.example.desafiospring.exception.BadRequestException;
 import com.example.desafiospring.exception.NotFoundException;
 import com.example.desafiospring.model.Product;
 import com.example.desafiospring.model.Purchase;
@@ -141,11 +142,25 @@ public class ProductServiceImp implements IProductService {
 
         for (Purchase p : purchases) { //Percore toda a lista de produtos que eu quero add ao ticket
             Product prod = getProductById(p.getProductId(), allProducts);
-            prod.setQuantity(p.getQuantity());
-            ticket.getArticles().add(prod); // add ao ticket
+            Product article = Product.builder()
+                    .productId(prod.getProductId())
+                    .name(prod.getName())
+                    .brand(prod.getBrand())
+                    .category(prod.getCategory())
+                    .freeShipping(prod.isFreeShipping())
+                    .prestige(prod.getPrestige())
+                    .price(prod.getPrice())
+                    .quantity(p.getQuantity())
+                    .build();
+            if(prod.getQuantity() < p.getQuantity()){
+                throw new BadRequestException("Quantidade do produto '" + prod.getName() + "' em estoque insuficiente." +
+                        " - Em estoque: " + prod.getQuantity() + " - Solicitado: " + p.getQuantity());
+            }
+            prod.setQuantity(prod.getQuantity() - article.getQuantity());
+            ticket.getArticles().add(article); // add ao ticket
             ticket.setTotal(ticket.getTotal() + prod.getPrice() * p.getQuantity()); // atualiza o valor total do ticket
         }
-
+        repo.updateProduct(allProducts);
         return ticket;
     }
 
