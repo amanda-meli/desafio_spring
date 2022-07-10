@@ -3,7 +3,6 @@ package com.example.desafiospring.controller;
 import com.example.desafiospring.dto.ProductDto;
 import com.example.desafiospring.exception.MethodNotAllowedException;
 import com.example.desafiospring.model.Product;
-import com.example.desafiospring.model.Purchase;
 import com.example.desafiospring.model.PurchaseRequest;
 import com.example.desafiospring.model.Ticket;
 import com.example.desafiospring.service.IProductService;
