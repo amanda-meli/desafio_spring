@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Classe contendo as informações para salvar/atualizar um carrinho de compra
+ */
 @Data
 public class PurchaseRequest {
     private int ticketId;

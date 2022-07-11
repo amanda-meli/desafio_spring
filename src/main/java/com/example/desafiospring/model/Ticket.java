@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Estrutura completa de um carrinho de compra
+ */
 @Getter
 @Setter
 @Builder

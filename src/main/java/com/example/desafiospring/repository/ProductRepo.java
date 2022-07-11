@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +19,10 @@ public class ProductRepo {
     private final String fileNameProducts = "products.json";
     private final String fileNameTicket = "tickets.json";
 
+    /***
+     * busca todos os produtos salvos
+     * @return todos os produtos
+     */
     public List<Product> getAllProducts() {
         ObjectMapper mapper = new ObjectMapper();
         List<Product> allProducts = null;
@@ -42,6 +45,10 @@ public class ProductRepo {
         return allProducts;
     }
 
+    /***
+     * Busca todas as compra que foram salvas
+     * @return compras salvas no arquivo
+     */
     public List<Ticket> getAllTicket() {
         ObjectMapper mapper = new ObjectMapper();
         List<Ticket> allTickets = null;
@@ -67,6 +74,11 @@ public class ProductRepo {
         return new ArrayList<>(allTickets);
     }
 
+    /***
+     * Salvar uma lista de produtos
+     * @param products lista que será adiciona a lista atual
+     * @return lista que foi salva
+     */
     public ArrayList<Product> saveProducts(ArrayList<Product> products) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
@@ -97,6 +109,11 @@ public class ProductRepo {
         return products;
     }
 
+    /***
+     * Salva mais uma compra no arquivo
+     * @param ticket compra que será salva
+     * @return compra que foi salva
+     */
     public Ticket saveTicket(Ticket ticket) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
@@ -130,6 +147,10 @@ public class ProductRepo {
         return ticket;
     }
 
+    /***
+     * Atualiza a lista que compras que está salva no banco de dados
+     * @param allTicketsCurrent lista nova que estará no arquivo
+     */
     public void updateTicket(List<Ticket> allTicketsCurrent) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
@@ -151,6 +172,10 @@ public class ProductRepo {
 
     }
 
+    /***
+     * Atualiza a lista que produtos que está salva no arquivo
+     * @param allProducts lista nova que estará no arquivo
+     */
     public void updateProduct(List<Product> allProducts) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
