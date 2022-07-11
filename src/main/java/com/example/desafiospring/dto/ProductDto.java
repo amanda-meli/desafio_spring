@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Informações básicas de um produto
+ */
 @Getter
 @Setter
 @NoArgsConstructor

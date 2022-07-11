@@ -20,6 +20,12 @@ public class ProductServiceImp implements IProductService {
     @Autowired
     private ProductRepo repo;
 
+    /***
+     * Obtem todos os produtos
+     * @param order define qual a ordem que os Produtos estarão na lista.
+     *              Opções: por nome -> "0" - A a Z, "1" - Z a A. por preço -> "2" - Decrescente, "3" - Crescente.
+     * @return Lista contendo todos os arquivos presentes no arquivo.
+     */
     private List<Product> allProducts(String order) {
         switch (order) {
             case "0":
@@ -188,6 +194,12 @@ public class ProductServiceImp implements IProductService {
         return ticket;
     }
 
+    /***
+     * Filtra um ticket de uma lista
+     * @param id id do ticket que você quer
+     * @param allTickets lista de tickets que o filtro irá percorrer
+     * @return o ticket encontrado ou a exceção NotFoundException caso o produto na seja encontrado.
+     */
     private Ticket getTicketById(int id, List<Ticket> allTickets) {
         for (Ticket t : allTickets) { //procura se esse produto exite na lista
             if (t.getId() == id) { //quando encontrar
@@ -197,6 +209,12 @@ public class ProductServiceImp implements IProductService {
         throw new NotFoundException("Não existe ticket com o id: " + id);
     }
 
+    /***
+     * Filtra um produto de uma lista
+     * @param id id do produto que você quer
+     * @param allProducts lista de produtos que o filtro irá percorrer
+     * @return o produto encontrado ou a exceção NotFoundException caso o produto na seja encontrado.
+     */
     private Product getProductById(int id, List<Product> allProducts) {
         for (Product prod : allProducts) { //procura se esse produto exite na lista
             if (prod.getProductId() == id) { //quando encontrar
