@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "5f01ab5e-db40-4fb9-89db-0d7c48ba8533",
+		"name": "product",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "addProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    {\n        \"productId\": 1,\n        \"name\": \"Serra de Bancada\",\n        \"category\": \"Ferramentas\",\n        \"brand\": \"FORTGPRO\",\n        \"price\": 1800.00,\n        \"quantity\": 5,\n        \"freeShipping\": true,\n        \"prestige\": \"****\"\n    },\n    {\n        \"productId\": 2,\n        \"name\": \"Furadeira\",\n        \"category\": \"Ferramentas\",\n        \"brand\": \"Black & Decker\",\n        \"price\": 500,\n        \"quantity\": 7,\n        \"freeShipping\": true,\n        \"prestige\": \"****\"\n    },\n    {\n        \"productId\": 3,\n        \"name\": \"Soldadora\",\n        \"category\": \"Ferramentas\",\n        \"brand\": \"Black & Decker\",\n        \"price\": 350.00,\n        \"quantity\": 10,\n        \"freeShipping\": true,\n        \"prestige\": \"***\"\n    },\n    {\n        \"productId\": 4,\n        \"name\": \"Chuteira\",\n        \"category\": \"Esportes\",\n        \"brand\": \"Adidas\",\n        \"price\": 235.00,\n        \"quantity\": 6,\n        \"freeShipping\": true,\n        \"prestige\": \"*****\"\n    },\n    {\n        \"productId\": 5,\n        \"name\": \"Mini Cama elastica\",\n        \"category\": \"Esportes\",\n        \"brand\": \"Starboard\",\n        \"price\": 183.00,\n        \"quantity\": 4,\n        \"freeShipping\": true,\n        \"prestige\": \"*****\"\n    },\n    {\n        \"productId\": 6,\n        \"name\": \"Camiseta\",\n        \"category\": \"Esportes\",\n        \"brand\": \"Topper\",\n        \"price\": 80.00,\n        \"quantity\": 2,\n        \"freeShipping\": false,\n        \"prestige\": \"***\"\n    },\n    {\n        \"productId\": 7,\n        \"name\": \"Redmi Note 9\",\n        \"category\": \"Celulares\",\n        \"brand\": \"Xiaomi\",\n        \"price\": 2800.00,\n        \"quantity\": 15,\n        \"freeShipping\": true,\n        \"prestige\": \"****\"\n    },\n    {\n        \"productId\": 8,\n        \"name\": \"Smartwatch\",\n        \"category\": \"Celulares\",\n        \"brand\": \"Noga\",\n        \"price\": 1200.00,\n        \"quantity\": 5,\n        \"freeShipping\": true,\n        \"prestige\": \"**\"\n    },\n    {\n        \"productId\": 9,\n        \"name\": \"Camisa\",\n        \"category\": \"Roupas\",\n        \"brand\": \"Fila\",\n        \"price\": 79.00,\n        \"quantity\": 2,\n        \"freeShipping\": false,\n        \"prestige\": \"***\"\n    },\n    {\n        \"productId\": 10,\n        \"name\": \"Calcas\",\n        \"category\": \"Roupas\",\n        \"brand\": \"Oakley\",\n        \"price\": 73.00,\n        \"quantity\": 6,\n        \"freeShipping\": false,\n        \"prestige\": \"***\"\n    },\n    {\n        \"productId\": 11,\n        \"name\": \"Meias\",\n        \"category\": \"Roupas\",\n        \"brand\": \"Gonew\",\n        \"price\": 10.00,\n        \"quantity\": 8,\n        \"freeShipping\": false,\n        \"prestige\": \"*\"\n    },\n    {\n        \"productId\": 12,\n        \"name\": \"Shorts\",\n        \"category\": \"Roupas\",\n        \"brand\": \"Lacoste\",\n        \"price\": 275.00,\n        \"quantity\": 9,\n        \"freeShipping\": true,\n        \"prestige\": \"***\"\n    }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/v1/insert-articles-request"
+			},
+			"response": []
+		},
+		{
+			"name": "getAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/v1/articles"
+			},
+			"response": []
+		},
+		{
+			"name": "checkStock",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/v1/articles/13"
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"articlesPurchaseRequest\":\n   [\n       {\n            \"productId\":1,\n            \"quantity\":1\n       },\n       {\n            \"productId\":2,\n            \"quantity\":1\n       }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/v1/purchase-request"
+			},
+			"response": []
+		},
+		{
+			"name": "shopping-car",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ticketId\" : 2,\n    \"articlesPurchaseRequest\":\n   [\n       {\n            \"productId\":1,\n            \"quantity\":5\n       },\n      {\n            \"productId\":2,\n            \"quantity\":7\n       }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/v1/shopping-car"
+			},
+			"response": []
+		}
+	]
+}
