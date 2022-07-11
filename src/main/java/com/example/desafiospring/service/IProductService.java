@@ -51,7 +51,25 @@ public interface IProductService {
      * @return Uma lista contendo os produtos
      */
     List<ProductDto> findByPrestige(String prestige, String order);
+
+    /***
+     * Verificar a quantidade em estoque do produto
+     * @param id referencia do produto que será consultado o estoque
+     * @return o produto
+     */
     ProductDto checkStock(int id);
+
+    /***
+     * Salva uma nova compra
+     * @param purchases lista contendo os produtos comprados
+     * @return compra que foi salva
+     */
     Ticket purchaseRequest(List<Purchase> purchases);
+
+    /***
+     * Adiciona uma lista de produtos a uma contra já existentes
+     * @param purchases produtos para adiconar a uma compra já existente.
+     * @return compra contendo os produtos
+     */
     Ticket shoppingCar(PurchaseRequest purchases);
 }
